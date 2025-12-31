@@ -49,7 +49,7 @@
                         <label class="form-label fw-bold text-dark small ms-1">Full Name</label>
                         <div class="input-group">
                             <input type="text" name="name" class="form-control py-3 px-4 rounded-3 border-secondary border-opacity-25 bg-white shadow-none"
-                                   placeholder="e.g. John Doe" value="{{ old('name') }}" required
+                                   placeholder="Name" value="{{ old('name') }}" required
                                    style="border-radius: 12px;">
                             <span class="material-symbols-outlined position-absolute top-50 end-0 translate-middle-y me-3 text-muted pe-none">person</span>
                         </div>

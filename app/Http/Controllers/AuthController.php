@@ -34,13 +34,6 @@ class AuthController extends Controller
         ]);
 
 
-        Wallet::create([
-            'user_id' => $user->id,
-            'name' => 'Tunai (Cash)',
-            'balance' => 0,
-            'icon' => 'payments'
-        ]);
-
         try {
             Mail::to($user->email)->send(new WelcomeEmail($user));
         } catch (\Exception $e) {
