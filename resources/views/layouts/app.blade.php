@@ -8,13 +8,11 @@
     <link href="{{ asset('bootstrap5.2/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
     <style>
         body { font-family: 'Manrope', sans-serif; background-color: #f6f8f6; }
 
-        /* Custom Sidebar Style */
         .sidebar {
             min-height: 100vh;
             background: #ffffff;
@@ -31,19 +29,17 @@
             gap: 12px;
         }
         .nav-link:hover, .nav-link.active {
-            background-color: #eefdf3; /* Hijau muda pudar */
-            color: #13ec5b; /* Hijau WeSave */
+            background-color: #eefdf3;
+            color: #13ec5b;
         }
         .nav-link .material-symbols-outlined { font-size: 22px; }
 
-        /* Navbar Style */
         .top-navbar {
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid #e9ecef;
         }
 
-        /* Card Style agar mirip desain */
         .card-custom {
             border: 1px solid #f1f5f9;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
@@ -97,6 +93,7 @@
     </aside>
 
     <main class="flex-grow-1" style="margin-left: 280px; min-height: 100vh;">
+
         <nav class="navbar top-navbar sticky-top px-4 py-3">
             <div class="d-flex justify-content-between w-100 align-items-center">
 
@@ -108,7 +105,8 @@
                             </button>
                             <input type="text" name="search" class="form-control border-start-0 rounded-end-4 shadow-none py-2"
                                 placeholder="Cari transaksi (cth: Makan, Gaji)..."
-                                value="{{ request('search') }}"> </div>
+                                value="{{ request('search') }}">
+                        </div>
                     </form>
                 </div>
 
@@ -161,14 +159,30 @@
                         </ul>
                     </div>
 
-                    <div class="d-flex align-items-center gap-2">
-                        <div class="text-end d-none d-sm-block">
-                            <p class="mb-0 fw-bold small text-dark">{{ Auth::user()->name ?? 'Guest' }}</p>
-                            <small class="text-muted" style="font-size: 11px;">{{ Auth::user()->role ?? 'User' }}</small>
-                        </div>
-                        <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name ?? 'User' }}&background=13ec5b&color=fff" class="rounded-circle" width="40" height="40" alt="Avatar">
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center gap-2 text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="text-end d-none d-sm-block">
+                                <p class="mb-0 fw-bold small text-dark">{{ Auth::user()->name ?? 'Guest' }}</p>
+                                <small class="text-muted" style="font-size: 11px;">User</small>
+                            </div>
+                            <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&background=13ec5b&color=fff' }}"
+                                class="rounded-circle border border-2 border-white shadow-sm object-fit-cover"
+                                width="40" height="40" alt="Avatar">
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 mt-2 p-2" style="width: 220px;">
+                            <li>
+                                <h6 class="dropdown-header text-muted small fw-bold text-uppercase my-1">Manage Account</h6>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-2 rounded-3 py-2 my-1" href="{{ route('profile.edit') }}">
+                                    <span class="material-symbols-outlined fs-5 text-muted">settings</span>
+                                    <span class="fw-bold small">Settings</span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                </div>
+                    </div>
             </div>
         </nav>
 
@@ -181,4 +195,3 @@
 <script src="{{ asset('bootstrap5.2/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
-

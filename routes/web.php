@@ -9,6 +9,7 @@
     use App\Http\Controllers\ReportController;
     use App\Http\Controllers\DashboardController;
     use App\Http\Controllers\ForgotPasswordController;
+    use App\Http\Controllers\ProfileController;
 
     Route::get('/', function () {
         if (Auth::check()) {
@@ -17,7 +18,6 @@
         return redirect()->route('login');
     });
 
-    // 2. ROUTE TAMU (Guest Middleware)
     Route::middleware('guest')->group(function () {
         Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
         Route::post('/login', [AuthController::class, 'login']);
@@ -31,41 +31,6 @@
     });
 
     Route::middleware('auth')->group(function () {
-
-        Route::get('/force-fill-categories', function () {
-            $user = Illuminate\Support\Facades\Auth::user();
-
-
-            $defaults = [
-                ['name' => 'Makan & Minum', 'type' => 'expense'],
-                ['name' => 'Transportasi', 'type' => 'expense'],
-                ['name' => 'Belanja', 'type' => 'expense'],
-                ['name' => 'Tagihan', 'type' => 'expense'],
-                ['name' => 'Hiburan', 'type' => 'expense'],
-                ['name' => 'Kesehatan', 'type' => 'expense'],
-                ['name' => 'Gaji', 'type' => 'income'],
-                ['name' => 'Bonus', 'type' => 'income'],
-            ];
-
-            $count = 0;
-            foreach ($defaults as $cat) {
-                $exists = \App\Models\Category::where('user_id', $user->id)
-                    ->where('name', $cat['name'])
-                    ->exists();
-
-                if (!$exists) {
-                    \App\Models\Category::create([
-                        'user_id' => $user->id,
-                        'name' => $cat['name'],
-                        'type' => $cat['type']
-                    ]);
-                    $count++;
-                }
-            }
-
-            return redirect()->route('transactions.index')
-                ->with('success', "Berhasil memulihkan $count kategori! Coba cek dropdown sekarang.");
-        })->middleware('auth');
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -91,4 +56,11 @@
             Auth::user()->unreadNotifications->markAsRead();
             return redirect()->back();
         })->name('notifications.readAll');
+
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+        Route::delete('/profile/avatar', [ProfileController::class, 'destroyAvatar'])->name('profile.avatar.destroy');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     });
