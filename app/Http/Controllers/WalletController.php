@@ -28,10 +28,10 @@ class WalletController extends Controller
             'user_id' => Auth::id(),
             'name' => $request->name,
             'balance' => $request->balance,
-            'icon' => 'account_balance_wallet', 
+            'icon' => 'account_balance_wallet',
         ]);
 
-        return redirect()->back()->with('success', 'Dompet berhasil ditambahkan!');
+        return redirect()->back()->with('success', 'Wallet added successfully!');
     }
 
     public function destroy($id)
@@ -39,6 +39,6 @@ class WalletController extends Controller
         $wallet = Wallet::where('user_id', Auth::id())->findOrFail($id);
         $wallet->delete();
 
-        return redirect()->back()->with('success', 'Dompet berhasil dihapus.');
+        return redirect()->back()->with('success', 'Wallet successfully deleted.');
     }
 }

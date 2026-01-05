@@ -38,33 +38,48 @@ Route::group([
     Route::middleware('auth')->group(function () {
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-        Route::get('/wallets', [WalletController::class, 'index'])->name('wallets.index');
-        Route::post('/wallets', [WalletController::class, 'store'])->name('wallets.store');
-        Route::delete('/wallets/{id}', [WalletController::class, 'destroy'])->name('wallets.destroy');
+        Route::middleware('role:user')->group(function () {
 
-        Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
-        Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
-        Route::delete('/transactions/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+            // Wallets
+            Route::get('/wallets', [WalletController::class, 'index'])->name('wallets.index');
+            Route::post('/wallets', [WalletController::class, 'store'])->name('wallets.store');
+            Route::delete('/wallets/{id}', [WalletController::class, 'destroy'])->name('wallets.destroy');
 
-        Route::get('/goals', [SavingGoalController::class, 'index'])->name('goals.index');
-        Route::post('/goals', [SavingGoalController::class, 'store'])->name('goals.store');
-        Route::post('/goals/{id}/allocate', [SavingGoalController::class, 'storeAllocation'])->name('goals.allocate');
-        Route::put('/goals/{id}', [SavingGoalController::class, 'update'])->name('goals.update');
-        Route::delete('/goals/{id}', [SavingGoalController::class, 'destroy'])->name('goals.destroy');
+            // Transactions
+            Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+            Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
+            Route::delete('/transactions/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
 
-        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+            // Saving Goals
+            Route::get('/goals', [SavingGoalController::class, 'index'])->name('goals.index');
+            Route::post('/goals', [SavingGoalController::class, 'store'])->name('goals.store');
+            Route::post('/goals/{id}/allocate', [SavingGoalController::class, 'storeAllocation'])->name('goals.allocate');
+            Route::put('/goals/{id}', [SavingGoalController::class, 'update'])->name('goals.update');
+            Route::delete('/goals/{id}', [SavingGoalController::class, 'destroy'])->name('goals.destroy');
 
-        Route::get('/notifications/read-all', function () {
-            Auth::user()->unreadNotifications->markAsRead();
-            return redirect()->back();
-        })->name('notifications.readAll');
+            // Reports
+            Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile/avatar', [ProfileController::class, 'destroyAvatar'])->name('profile.avatar.destroy');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+            // Notifications
+            Route::get('/notifications/read-all', function () {
+                Auth::user()->unreadNotifications->markAsRead();
+                return redirect()->back();
+            })->name('notifications.readAll');
+
+            // Profile
+            Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+            Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+            Route::delete('/profile/avatar', [ProfileController::class, 'destroyAvatar'])->name('profile.avatar.destroy');
+            Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        });
+
+        Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+
+            Route::get('/dashboard', function () {
+                return "<h1>Halaman Admin</h1><p>Hanya user dengan role 'admin' yang bisa melihat ini.</p>";
+            })->name('dashboard');
+        });
     });
 });
