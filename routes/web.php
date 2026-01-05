@@ -1,16 +1,21 @@
-    <?php
+<?php
 
-    use Illuminate\Support\Facades\Route;
-    use Illuminate\Support\Facades\Auth;
-    use App\Http\Controllers\AuthController;
-    use App\Http\Controllers\WalletController;
-    use App\Http\Controllers\TransactionController;
-    use App\Http\Controllers\SavingGoalController;
-    use App\Http\Controllers\ReportController;
-    use App\Http\Controllers\DashboardController;
-    use App\Http\Controllers\ForgotPasswordController;
-    use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\WalletController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\SavingGoalController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\ProfileController;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
+Route::group([
+    'prefix' => LaravelLocalization::setLocale(),
+    'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
+], function () {
     Route::get('/', function () {
         if (Auth::check()) {
             return redirect()->route('dashboard');
@@ -59,8 +64,7 @@
 
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-
         Route::delete('/profile/avatar', [ProfileController::class, 'destroyAvatar'])->name('profile.avatar.destroy');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
     });
+});

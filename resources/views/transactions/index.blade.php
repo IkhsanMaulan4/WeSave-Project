@@ -1,23 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Riwayat Transaksi')
+@section('title', __('messages.history_transaction'))
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2 class="fw-bold text-dark mb-1">Riwayat Transaksi</h2>
+        <h2 class="fw-bold text-dark mb-1">{{ __(('messages.history_transaction')) }}</h2>
         @if(request('search'))
             <p class="text-muted mb-0">
-                Menampilkan hasil pencarian: <strong>"{{ request('search') }}"</strong>
+                {{ __(('messages.search_result')) }} <strong>"{{ request('search') }}"</strong>
                 <a href="{{ route('transactions.index') }}" class="text-danger text-decoration-none ms-2 small fw-bold">(Reset)</a>
             </p>
         @else
-            <p class="text-muted">Pantau arus kas masuk dan keluar.</p>
+            <p class="text-muted">{{ __(('messages.onboarding_text')) }}</p>
         @endif
     </div>
     <button class="btn btn-success fw-bold px-4 py-2 rounded-4 d-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#addTransactionModal" style="background-color: #13ec5b; border: none; color: #000;">
         <span class="material-symbols-outlined">add</span>
-        Tambah Transaksi
+        {{ __(('messages.add_transaction')) }}
     </button>
 </div>
 
@@ -32,12 +32,12 @@
         <table class="table table-hover align-middle mb-0">
             <thead class="bg-light">
                 <tr>
-                    <th class="p-4 text-muted small fw-bold border-0">TRANSAKSI</th>
-                    <th class="p-4 text-muted small fw-bold border-0">DOMPET</th>
-                    <th class="p-4 text-muted small fw-bold border-0">KATEGORI</th>
-                    <th class="p-4 text-muted small fw-bold border-0">TANGGAL</th>
-                    <th class="p-4 text-muted small fw-bold border-0 text-end">JUMLAH</th>
-                    <th class="p-4 text-muted small fw-bold border-0 text-end">AKSI</th>
+                    <th class="p-4 text-muted small fw-bold border-0">{{ __(('messages.transaction_bold')) }}</th>
+                    <th class="p-4 text-muted small fw-bold border-0">{{ __(('messages.wallet_bold')) }}</th>
+                    <th class="p-4 text-muted small fw-bold border-0">{{ __(('messages.category_bold')) }}</th>
+                    <th class="p-4 text-muted small fw-bold border-0">{{ __(('messages.date_bold')) }}</th>
+                    <th class="p-4 text-muted small fw-bold border-0 text-end">{{ __(('messages.amount_bold')) }}</th>
+                    <th class="p-4 text-muted small fw-bold border-0 text-end">{{ __(('messages.action_bold')) }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -91,7 +91,7 @@
                 <tr>
                     <td colspan="6" class="text-center p-5 text-muted">
                         <div class="mb-2"><span class="material-symbols-outlined fs-1">receipt_long</span></div>
-                        Belum ada transaksi. Yuk catat pengeluaranmu!
+                        {{ __(('messages.empty_transactions_msg')) }}
                     </td>
                 </tr>
                 @endforelse
@@ -104,7 +104,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0">
             <div class="modal-header border-bottom-0 pb-0">
-                <h5 class="modal-title fw-bold">Tambah Transaksi</h5>
+                <h5 class="modal-title fw-bold">{{ __(('messages.add_transaction')) }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{ route('transactions.store') }}" method="POST" enctype="multipart/form-data">
@@ -113,23 +113,23 @@
 
                     <div class="d-flex justify-content-center mb-4 bg-light p-1 rounded-3">
                         <input type="radio" class="btn-check" name="type" id="type-expense" value="expense" checked onclick="toggleTransfer(false)">
-                        <label class="btn btn-sm w-100 rounded-3 fw-bold" for="type-expense" id="label-expense">Expense</label>
+                        <label class="btn btn-sm w-100 rounded-3 fw-bold" for="type-expense" id="label-expense">{{ __(('messages.expense')) }}</label>
 
                         <input type="radio" class="btn-check" name="type" id="type-income" value="income" onclick="toggleTransfer(false)">
-                        <label class="btn btn-sm w-100 rounded-3 fw-bold" for="type-income" id="label-income">Income</label>
+                        <label class="btn btn-sm w-100 rounded-3 fw-bold" for="type-income" id="label-income">{{ __(('messages.income')) }}</label>
 
                         <input type="radio" class="btn-check" name="type" id="type-transfer" value="transfer" onclick="toggleTransfer(true)">
-                        <label class="btn btn-sm w-100 rounded-3 fw-bold" for="type-transfer" id="label-transfer">Transfer</label>
+                        <label class="btn btn-sm w-100 rounded-3 fw-bold" for="type-transfer" id="label-transfer">{{ __(('messages.transfer')) }}</label>
                     </div>
 
                     <div class="mb-4 text-center">
-                        <label class="small text-muted fw-bold mb-1">NOMINAL (IDR)</label>
+                        <label class="small text-muted fw-bold mb-1">{{ __(('messages.nominal_bold')) }} (IDR)</label>
                         <input type="number" name="amount" class="form-control form-control-lg text-center border-0 fw-bolder display-6 shadow-none" placeholder="0" style="font-size: 2rem;" required>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold text-muted">Dompet</label>
+                            <label class="form-label small fw-bold text-muted">{{ __(('messages.wallet')) }}</label>
                             <select name="wallet_id" class="form-select rounded-3 py-2" required>
                                 @foreach($wallets as $w)
                                     <option value="{{ $w->id }}">{{ $w->name }} (Rp {{ number_format($w->balance,0,',','.') }})</option>
@@ -138,9 +138,9 @@
                         </div>
 
                         <div class="col-md-6" id="category-wrapper">
-                            <label class="form-label small fw-bold text-muted">Kategori</label>
+                            <label class="form-label small fw-bold text-muted">{{ __(('messages.category')) }}</label>
                             <select name="category_id" class="form-select rounded-3 py-2">
-                                <option value="">Pilih Kategori</option>
+                                <option value="">{{ __(('messages.choose_category')) }}</option>
                                 @foreach($categories as $c)
                                     <option value="{{ $c->id }}">{{ $c->name }}</option>
                                 @endforeach
@@ -148,9 +148,9 @@
                         </div>
 
                         <div class="col-md-6 d-none" id="destination-wrapper">
-                            <label class="form-label small fw-bold text-muted">Ke Dompet</label>
+                            <label class="form-label small fw-bold text-muted">{{ __(('messages.to_wallet')) }}</label>
                             <select name="destination_wallet_id" class="form-select rounded-3 py-2">
-                                <option value="">Pilih Tujuan</option>
+                                <option value="">{{ __(('messages.select_destination')) }}</option>
                                 @foreach($wallets as $w)
                                     <option value="{{ $w->id }}">{{ $w->name }}</option>
                                 @endforeach
@@ -159,24 +159,24 @@
                     </div>
 
                     <div class="mt-3">
-                        <label class="form-label small fw-bold text-muted">Tanggal</label>
+                        <label class="form-label small fw-bold text-muted">{{ __(('messages.date')) }}</label>
                         <input type="date" name="transaction_date" class="form-control rounded-3 py-2" value="{{ date('Y-m-d') }}" required>
                     </div>
 
                     <div class="mt-3">
-                        <label class="form-label small fw-bold text-muted">Catatan</label>
-                        <textarea name="description" class="form-control rounded-3" rows="2" placeholder="Contoh: Makan siang nasi padang"></textarea>
+                        <label class="form-label small fw-bold text-muted">{{ __(('messages.notes')) }}</label>
+                        <textarea name="description" class="form-control rounded-3" rows="2" placeholder="{{ __(('messages.transaction_desc_placeholder')) }}"></textarea>
                     </div>
 
                     <div class="mt-3">
-                        <label class="form-label small fw-bold text-muted">Bukti Foto (Opsional)</label>
+                        <label class="form-label small fw-bold text-muted">{{ __(('messages.photo_proof')) }} (Opsional)</label>
                         <input type="file" name="proof_image" class="form-control rounded-3">
                     </div>
 
                 </div>
                 <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light rounded-3 fw-bold text-muted" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success rounded-3 fw-bold px-4 w-100" style="background-color: #13ec5b; border: none; color: #000;">Simpan Transaksi</button>
+                    <button type="button" class="btn btn-light rounded-3 fw-bold text-muted" data-bs-dismiss="modal">{{ __(('messages.cancel')) }}</button>
+                    <button type="submit" class="btn btn-success rounded-3 fw-bold px-4 w-100" style="background-color: #13ec5b; border: none; color: #000;">{{ __(('messages.save_transaction')) }}</button>
                 </div>
             </form>
         </div>

@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 
-@section('title', 'Daftar Akun Baru')
+@section('title', __('messages.register_page_title'))
 
 @section('content')
 <nav class="navbar navbar-expand-lg fixed-top bg-white border-bottom py-3" style="background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);">
@@ -15,9 +15,21 @@
             <span class="fs-4 fw-bold text-dark tracking-tight">WeSave</span>
         </a>
 
-        <a href="{{ route('login') }}" class="btn btn-outline-light text-dark fw-bold border-1 border-secondary border-opacity-25 rounded-3 px-4 py-2" style="font-size: 0.9rem;">
-            Login
-        </a>
+        <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                <span class="material-symbols-outlined text-muted">language</span>
+                <span class="text-uppercase small fw-bold">{{ LaravelLocalization::getCurrentLocale() }}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-4 mt-2">
+                @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                    <li>
+                        <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}" class="dropdown-item small">
+                            {{ $properties['native'] }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
     </div>
 </nav>
 
@@ -28,8 +40,8 @@
             <div class="w-100 px-4" style="max-width: 480px;">
 
                 <div class="mb-4">
-                    <h1 class="fw-bolder display-5 mb-2 text-dark">Create Account</h1>
-                    <p class="text-muted fs-5">Start your financial journey today.</p>
+                    <h1 class="fw-bolder display-5 mb-2 text-dark">{{ __('messages.create_account_header') }}</h1>
+                    <p class="text-muted fs-5">{{ __('messages.register_subtitle') }}</p>
                 </div>
 
                 @if($errors->any())
@@ -46,30 +58,30 @@
                     @csrf
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold text-dark small ms-1">Full Name</label>
+                        <label class="form-label fw-bold text-dark small ms-1">{{ __('messages.full_name_label') }}</label>
                         <div class="input-group">
                             <input type="text" name="name" class="form-control py-3 px-4 rounded-3 border-secondary border-opacity-25 bg-white shadow-none"
-                                   placeholder="Name" value="{{ old('name') }}" required
+                                   placeholder="{{ __('messages.name_placeholder') }}" value="{{ old('name') }}" required
                                    style="border-radius: 12px;">
                             <span class="material-symbols-outlined position-absolute top-50 end-0 translate-middle-y me-3 text-muted pe-none">person</span>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold text-dark small ms-1">Email Address</label>
+                        <label class="form-label fw-bold text-dark small ms-1">{{ __('messages.email_address_label') }}</label>
                         <div class="input-group">
                             <input type="email" name="email" class="form-control py-3 px-4 rounded-3 border-secondary border-opacity-25 bg-white shadow-none"
-                                   placeholder="name@example.com" value="{{ old('email') }}" required
+                                   placeholder="{{ __('messages.email_example_placeholder') }}" value="{{ old('email') }}" required
                                    style="border-radius: 12px;">
                             <span class="material-symbols-outlined position-absolute top-50 end-0 translate-middle-y me-3 text-muted pe-none">mail</span>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold text-dark small ms-1">Password</label>
+                        <label class="form-label fw-bold text-dark small ms-1">{{ __('messages.password_label') }}</label>
                         <div class="input-group position-relative">
                             <input type="password" name="password" id="password" class="form-control py-3 px-4 rounded-3 border-secondary border-opacity-25 bg-white shadow-none"
-                                   placeholder="Create a password" required
+                                   placeholder="{{ __('messages.create_password_placeholder') }}" required
                                    style="border-radius: 12px; padding-right: 50px;">
                             <button class="btn border-0 position-absolute top-50 end-0 translate-middle-y me-2 text-muted" type="button" onclick="togglePassword('password', 'icon-pass-1')" style="z-index: 5;">
                                 <span class="material-symbols-outlined fs-5" id="icon-pass-1">visibility</span>
@@ -78,10 +90,10 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label fw-bold text-dark small ms-1">Confirm Password</label>
+                        <label class="form-label fw-bold text-dark small ms-1">{{ __('messages.confirm_password_label') }}</label>
                         <div class="input-group position-relative">
                             <input type="password" name="password_confirmation" id="password_confirmation" class="form-control py-3 px-4 rounded-3 border-secondary border-opacity-25 bg-white shadow-none"
-                                   placeholder="Repeat password" required
+                                   placeholder="{{ __('messages.repeat_password_placeholder') }}" required
                                    style="border-radius: 12px; padding-right: 50px;">
                             <button class="btn border-0 position-absolute top-50 end-0 translate-middle-y me-2 text-muted" type="button" onclick="togglePassword('password_confirmation', 'icon-pass-2')" style="z-index: 5;">
                                 <span class="material-symbols-outlined fs-5" id="icon-pass-2">visibility</span>
@@ -91,19 +103,19 @@
 
                     <button type="submit" class="btn w-100 py-3 fw-bold text-dark rounded-3 mb-3 shadow-sm"
                             style="background-color: #13ec5b; border: none; font-size: 1rem; border-radius: 12px;">
-                        Create Account
+                        {{ __('messages.create_account_btn') }}
                     </button>
 
                     <div class="text-center mt-4">
                         <p class="small text-muted fw-bold">
-                            Already have an account?
-                            <a href="{{ route('login') }}" class="text-success text-decoration-none fw-bolder">Login Here</a>
+                            {{ __('messages.already_have_account') }}
+                            <a href="{{ route('login') }}" class="text-success text-decoration-none fw-bolder">{{ __('messages.login_here') }}</a>
                         </p>
                     </div>
 
                     <div class="mt-4 text-center opacity-50 d-flex justify-content-center align-items-center gap-2">
                         <span class="material-symbols-outlined fs-6">lock</span>
-                        <small class="fw-bold" style="font-size: 0.75rem;">Secured by WeSave AI</small>
+                        <small class="fw-bold" style="font-size: 0.75rem;">{{ __('messages.secured_by') }}</small>
                     </div>
                 </form>
             </div>
@@ -121,7 +133,7 @@
                     <div class="mb-4 bg-success" style="width: 60px; height: 4px; border-radius: 10px;"></div>
 
                     <h2 class="text-white display-5 fw-bold mb-5" style="max-width: 450px; line-height: 1.2;">
-                        Join thousands managing their wealth smarter.
+                        {{ __('messages.register_hero_title') }}
                     </h2>
 
                     <div class="d-flex gap-3">
@@ -129,14 +141,14 @@
                             <div class="bg-warning bg-opacity-25 p-1 rounded text-warning d-flex">
                                 <span class="material-symbols-outlined fs-5">bolt</span>
                             </div>
-                            <span class="text-white small fw-bold">Fast Setup</span>
+                            <span class="text-white small fw-bold">{{ __('messages.hero_stat_fast') }}</span>
                         </div>
 
                         <div class="d-flex align-items-center gap-3 bg-white bg-opacity-10 backdrop-blur border border-white border-opacity-10 rounded-3 px-3 py-2">
                             <div class="bg-info bg-opacity-25 p-1 rounded text-info d-flex">
                                 <span class="material-symbols-outlined fs-5">insights</span>
                             </div>
-                            <span class="text-white small fw-bold">Real-time Analytics</span>
+                            <span class="text-white small fw-bold">{{ __('messages.hero_stat_analytics') }}</span>
                         </div>
                     </div>
                 </div>

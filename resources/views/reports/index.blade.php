@@ -5,7 +5,7 @@
 @section('content')
 <div class="mb-4">
     <h2 class="fw-bold text-dark mb-1">Financial Health Check</h2>
-    <p class="text-muted">Analisis otomatis kondisi keuanganmu bulan ini.</p>
+    <p class="text-muted">{{ __(('messages.auto_analysis_text')) }}</p>
 </div>
 
 <div class="row g-4">
@@ -31,13 +31,13 @@
         <div class="row g-3">
             <div class="col-6">
                 <div class="card card-custom border-0 p-3 h-100">
-                    <small class="text-muted fw-bold">Pemasukan</small>
+                    <small class="text-muted fw-bold">{{ __(('messages.income')) }}</small>
                     <h4 class="fw-bold text-success mt-1 mb-0">+ Rp {{ number_format($totalIncome, 0, ',', '.') }}</h4>
                 </div>
             </div>
             <div class="col-6">
                 <div class="card card-custom border-0 p-3 h-100">
-                    <small class="text-muted fw-bold">Pengeluaran</small>
+                    <small class="text-muted fw-bold">{{ __(('messages.expense')) }}</small>
                     <h4 class="fw-bold text-danger mt-1 mb-0">- Rp {{ number_format($totalExpense, 0, ',', '.') }}</h4>
                 </div>
             </div>
@@ -46,7 +46,7 @@
 
     <div class="col-lg-7">
         <div class="card card-custom border-0 p-4 h-100">
-            <h5 class="fw-bold text-dark mb-4">Pengeluaran per Kategori</h5>
+            <h5 class="fw-bold text-dark mb-4">{{ __(('messages.expenses_by_category')) }}</h5>
 
             @if(count($chartLabels) > 0)
                 <div style="height: 300px; position: relative;">
@@ -55,7 +55,7 @@
             @else
                 <div class="d-flex flex-column align-items-center justify-content-center h-100 text-muted">
                     <span class="material-symbols-outlined fs-1 mb-2">donut_small</span>
-                    <p>Belum ada data pengeluaran untuk ditampilkan.</p>
+                    <p>{{ __(('messages.no_expense_data')) }}</p>
                 </div>
             @endif
         </div>
@@ -71,10 +71,10 @@
         new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: {!! json_encode($chartLabels) !!}, // Data dari Controller
+                labels: {!! json_encode($chartLabels) !!},
                 datasets: [{
                     label: 'Total Pengeluaran (Rp)',
-                    data: {!! json_encode($chartData) !!}, // Data dari Controller
+                    data: {!! json_encode($chartData) !!},
                     backgroundColor: [
                         '#13ec5b', '#0d1b12', '#6366f1', '#f59e0b', '#ef4444',
                         '#ec4899', '#8b5cf6', '#14b8a6'
@@ -96,7 +96,7 @@
                         }
                     }
                 },
-                cutout: '70%', // Membuat bolong tengah (Donut)
+                cutout: '70%',
             }
         });
     }

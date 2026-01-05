@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 
-@section('title', 'Login')
+@section('title', __('messages.login_title'))
 
 @section('content')
 <nav class="navbar navbar-expand-lg fixed-top bg-white border-bottom py-3" style="background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);">
@@ -15,10 +15,23 @@
             <span class="fs-4 fw-bold text-dark tracking-tight">WeSave</span>
         </a>
 
-        <a href="{{ route('register') }}" class="btn btn-outline-light text-dark fw-bold border-1 border-secondary border-opacity-25 rounded-3 px-4 py-2" style="font-size: 0.9rem;">
-            Register
-        </a>
+        <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                <span class="material-symbols-outlined text-muted">language</span>
+                <span class="text-uppercase small fw-bold">{{ LaravelLocalization::getCurrentLocale() }}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-4 mt-2">
+                @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                    <li>
+                        <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}" class="dropdown-item small">
+                            {{ $properties['native'] }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
     </div>
+
 </nav>
 
 <div class="container-fluid min-vh-100 d-flex flex-column pt-5 mt-4">
@@ -28,8 +41,8 @@
             <div class="w-100 px-4" style="max-width: 480px;">
 
                 <div class="mb-5">
-                    <h1 class="fw-bolder display-5 mb-2 text-dark">Welcome Back</h1>
-                    <p class="text-muted fs-5">Access your AI-powered financial insights.</p>
+                    <h1 class="fw-bolder display-5 mb-2 text-dark">{{ __('messages.welcome_back') }}</h1>
+                    <p class="text-muted fs-5">{{ __('messages.login_subtitle') }}</p>
                 </div>
 
                 @if(session('success'))
@@ -48,20 +61,21 @@
                     @csrf
 
                     <div class="mb-4">
-                        <label class="form-label fw-bold text-dark small ms-1">Email Address</label>
+                        {{-- Menggunakan key yang sudah ada 'email_address_label' --}}
+                        <label class="form-label fw-bold text-dark small ms-1">{{ __('messages.email_address_label') }}</label>
                         <div class="input-group">
                             <input type="email" name="email" class="form-control py-3 px-4 rounded-3 border-secondary border-opacity-25 bg-white shadow-none"
-                                   placeholder="Enter your email" value="{{ old('email') }}" required
+                                   placeholder="{{ __('messages.email_placeholder') }}" value="{{ old('email') }}" required
                                    style="border-radius: 12px;">
                             <span class="material-symbols-outlined position-absolute top-50 end-0 translate-middle-y me-3 text-muted pe-none">mail</span>
                         </div>
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label fw-bold text-dark small ms-1">Password</label>
+                        <label class="form-label fw-bold text-dark small ms-1">{{ __('messages.password_label') }}</label>
                         <div class="input-group position-relative">
                             <input type="password" name="password" id="password" class="form-control py-3 px-4 rounded-3 border-secondary border-opacity-25 bg-white shadow-none"
-                                   placeholder="Enter your password" required
+                                   placeholder="{{ __('messages.password_input_placeholder') }}" required
                                    style="border-radius: 12px; padding-right: 50px;">
                             <button class="btn border-0 position-absolute top-50 end-0 translate-middle-y me-2 text-muted" type="button" onclick="togglePassword('password', 'icon-pass')" style="z-index: 5;">
                                 <span class="material-symbols-outlined fs-5" id="icon-pass">visibility</span>
@@ -73,29 +87,29 @@
                         <div class="form-check">
                             <input class="form-check-input border-secondary border-opacity-50" type="checkbox" name="remember" id="remember" style="width: 1.2em; height: 1.2em;">
                             <label class="form-check-label small fw-bold text-muted ms-1" for="remember">
-                                Remember Me
+                                {{ __('messages.remember_me') }}
                             </label>
                         </div>
                         <a href="{{ route('password.request') }}" class="small fw-bold text-muted text-decoration-none hover-primary">
-                            Forgot Password?
+                            {{ __('messages.forgot_password') }}
                         </a>
                     </div>
 
                     <button type="submit" class="btn w-100 py-3 fw-bold text-dark rounded-3 mb-3 shadow-sm"
                             style="background-color: #13ec5b; border: none; font-size: 1rem; border-radius: 12px;">
-                        Login
+                        {{ __('messages.login_btn') }}
                     </button>
 
                     <div class="text-center mt-4">
                         <p class="small text-muted fw-bold">
-                            Don't have an account?
-                            <a href="{{ route('register') }}" class="text-success text-decoration-none fw-bolder">Register</a>
+                            {{ __('messages.no_account') }}
+                            <a href="{{ route('register') }}" class="text-success text-decoration-none fw-bolder">{{ __('messages.register_btn') }}</a>
                         </p>
                     </div>
 
                     <div class="mt-5 text-center opacity-50 d-flex justify-content-center align-items-center gap-2">
                         <span class="material-symbols-outlined fs-6">lock</span>
-                        <small class="fw-bold" style="font-size: 0.75rem;">Secured by WeSave AI</small>
+                        <small class="fw-bold" style="font-size: 0.75rem;">{{ __('messages.secured_by') }}</small>
                     </div>
                 </form>
             </div>
@@ -113,7 +127,7 @@
                     <div class="mb-4 bg-success" style="width: 60px; height: 4px; border-radius: 10px;"></div>
 
                     <h2 class="text-white display-5 fw-bold mb-5" style="max-width: 400px; line-height: 1.2;">
-                        Smart insights for a secure financial future.
+                        {{ __('messages.hero_title') }}
                     </h2>
 
                     <div class="d-flex gap-3">
@@ -121,14 +135,14 @@
                             <div class="bg-success bg-opacity-25 p-1 rounded text-success d-flex">
                                 <span class="material-symbols-outlined fs-5">trending_up</span>
                             </div>
-                            <span class="text-white small fw-bold">+24% Growth</span>
+                            <span class="text-white small fw-bold">{{ __('messages.hero_stat_growth') }}</span>
                         </div>
 
                         <div class="d-flex align-items-center gap-3 bg-white bg-opacity-10 backdrop-blur border border-white border-opacity-10 rounded-3 px-3 py-2">
                             <div class="bg-primary bg-opacity-25 p-1 rounded text-primary d-flex" style="color: #60a5fa;">
                                 <span class="material-symbols-outlined fs-5">shield</span>
                             </div>
-                            <span class="text-white small fw-bold">Bank-Grade Security</span>
+                            <span class="text-white small fw-bold">{{ __('messages.hero_stat_security') }}</span>
                         </div>
                     </div>
                 </div>
@@ -139,12 +153,11 @@
 </div>
 
 <style>
-    /* Tambahan CSS kecil agar hover efeknya halus */
     .hover-primary:hover { color: #13ec5b !important; }
     .form-control:focus {
         border-color: #13ec5b;
         box-shadow: 0 0 0 0.25rem rgba(19, 236, 91, 0.25);
     }
-    body { background-color: #f8fcf9; } /* Background Light Greenish */
+    body { background-color: #f8fcf9; }
 </style>
 @endsection

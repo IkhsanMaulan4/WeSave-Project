@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Target Menabung')
+@section('title', __('messages.goals_title'))
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2 class="fw-bold text-dark mb-1">Target Menabung</h2>
-        <p class="text-muted">Wujudkan impianmu satu per satu.</p>
+        <h2 class="fw-bold text-dark mb-1">{{ __('messages.goals_title') }}</h2>
+        <p class="text-muted">{{ __('messages.goals_subtitle') }}</p>
     </div>
     <button class="btn btn-success fw-bold px-4 py-2 rounded-4 d-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#addGoalModal" style="background-color: #13ec5b; border: none; color: #000;">
         <span class="material-symbols-outlined">add_task</span>
-        Buat Target Baru
+        {{ __('messages.create_goal_btn') }}
     </button>
 </div>
 
@@ -47,14 +47,14 @@
                 <div class="d-flex gap-2">
                     <button class="btn btn-sm btn-light text-primary rounded-circle p-2"
                             data-bs-toggle="modal" data-bs-target="#editGoalModal{{ $goal->id }}"
-                            title="Edit Target">
+                            title="{{ __('messages.edit_goal_tooltip') }}">
                         <span class="material-symbols-outlined fs-6">edit</span>
                     </button>
 
-                    <form action="{{ route('goals.destroy', $goal->id) }}" method="POST" onsubmit="return confirm('Yakin hapus target ini? Saldo yang terkumpul akan dikembalikan ke dompet.');">
+                    <form action="{{ route('goals.destroy', $goal->id) }}" method="POST" onsubmit="return confirm('{{ __('messages.delete_goal_confirm') }}');">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-sm btn-light text-danger rounded-circle p-2" title="Hapus">
+                        <button class="btn btn-sm btn-light text-danger rounded-circle p-2" title="{{ __('messages.delete') }}">
                             <span class="material-symbols-outlined fs-6">delete</span>
                         </button>
                     </form>
@@ -62,7 +62,7 @@
             </div>
 
             <h5 class="fw-bold text-dark mb-1">{{ $goal->name }}</h5>
-            <p class="text-muted small mb-3">Target: Rp {{ number_format($goal->target_amount, 0, ',', '.') }}</p>
+            <p class="text-muted small mb-3">{{ __('messages.goal_target_label') }} Rp {{ number_format($goal->target_amount, 0, ',', '.') }}</p>
 
             <div class="d-flex justify-content-between align-items-end mb-1">
                 <span class="fw-bold text-dark">Rp {{ number_format($goal->current_amount, 0, ',', '.') }}</span>
@@ -75,11 +75,11 @@
             @if($percentage < 100)
             <button class="btn btn-light w-100 fw-bold d-flex justify-content-center align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#allocateModal{{ $goal->id }}">
                 <span class="material-symbols-outlined fs-6">savings</span>
-                Isi Tabungan
+                {{ __('messages.fill_savings_btn') }}
             </button>
             @else
             <div class="btn btn-success bg-opacity-10 text-success w-100 fw-bold border-0">
-                <span class="material-symbols-outlined align-middle me-1">check_circle</span> Tercapai!
+                <span class="material-symbols-outlined align-middle me-1">check_circle</span> {{ __('messages.goal_achieved_badge') }}
             </div>
             @endif
         </div>
@@ -89,31 +89,31 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-4 border-0">
                 <div class="modal-header border-0">
-                    <h5 class="modal-title fw-bold">Nabung untuk "{{ $goal->name }}"</h5>
+                    <h5 class="modal-title fw-bold">{{ __('messages.allocate_title') }} "{{ $goal->name }}"</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="{{ route('goals.allocate', $goal->id) }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="alert alert-info border-0 bg-info bg-opacity-10 text-info small">
-                            Saldo akan diambil dari dompet yang kamu pilih.
+                            {{ __('messages.allocate_alert') }}
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">Ambil dari Dompet</label>
+                            <label class="form-label small fw-bold text-muted">{{ __('messages.source_wallet_label') }}</label>
                             <select name="wallet_id" class="form-select rounded-3 py-2" required>
                                 @foreach($wallets as $w)
-                                    <option value="{{ $w->id }}">{{ $w->name }} (Saldo: Rp {{ number_format($w->balance,0,',','.') }})</option>
+                                    <option value="{{ $w->id }}">{{ $w->name }} ({{ __('messages.wallet_balance_info') }} Rp {{ number_format($w->balance,0,',','.') }})</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">Nominal Nabung (Rp)</label>
+                            <label class="form-label small fw-bold text-muted">{{ __('messages.saving_amount_label') }}</label>
                             <input type="number" name="amount" class="form-control rounded-3 py-2" placeholder="0" required>
                         </div>
                     </div>
                     <div class="modal-footer border-0">
-                        <button type="button" class="btn btn-light rounded-3 fw-bold text-muted" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-info text-white rounded-3 fw-bold px-4">Tabung Sekarang</button>
+                        <button type="button" class="btn btn-light rounded-3 fw-bold text-muted" data-bs-dismiss="modal">{{ __('messages.cancel') }}</button>
+                        <button type="submit" class="btn btn-info text-white rounded-3 fw-bold px-4">{{ __('messages.save_now_btn') }}</button>
                     </div>
                 </form>
             </div>
@@ -124,29 +124,30 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-4 border-0">
                 <div class="modal-header border-0">
-                    <h5 class="modal-title fw-bold">Edit Target</h5>
+                    <h5 class="modal-title fw-bold">{{ __('messages.edit_goal_title') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="{{ route('goals.update', $goal->id) }}" method="POST">
                     @csrf
-                    @method('PUT') <div class="modal-body">
+                    @method('PUT')
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">Nama Target</label>
+                            <label class="form-label small fw-bold text-muted">{{ __('messages.goal_name_label') }}</label>
                             <input type="text" name="name" class="form-control rounded-3 py-2" value="{{ $goal->name }}" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">Target Dana (Rp)</label>
+                            <label class="form-label small fw-bold text-muted">{{ __('messages.target_amount_label') }}</label>
                             <input type="number" name="target_amount" class="form-control rounded-3 py-2" value="{{ $goal->target_amount }}" required>
-                            <small class="text-muted d-block mt-1" style="font-size: 11px;">Mengubah nominal target akan mengubah % pencapaian.</small>
+                            <small class="text-muted d-block mt-1" style="font-size: 11px;">{{ __('messages.edit_goal_warning') }}</small>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">Deadline (Opsional)</label>
+                            <label class="form-label small fw-bold text-muted">{{ __('messages.deadline_label') }}</label>
                             <input type="date" name="deadline" class="form-control rounded-3 py-2" value="{{ $goal->deadline ? \Carbon\Carbon::parse($goal->deadline)->format('Y-m-d') : '' }}">
                         </div>
                     </div>
                     <div class="modal-footer border-0">
-                        <button type="button" class="btn btn-light rounded-3 fw-bold text-muted" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary rounded-3 fw-bold px-4">Simpan Perubahan</button>
+                        <button type="button" class="btn btn-light rounded-3 fw-bold text-muted" data-bs-dismiss="modal">{{ __('messages.cancel') }}</button>
+                        <button type="submit" class="btn btn-primary rounded-3 fw-bold px-4">{{ __('messages.save_changes_btn') }}</button>
                     </div>
                 </form>
             </div>
@@ -158,8 +159,8 @@
         <div class="bg-light d-inline-block p-4 rounded-circle mb-3">
             <span class="material-symbols-outlined fs-1 text-muted">track_changes</span>
         </div>
-        <h5 class="fw-bold text-muted">Belum ada target.</h5>
-        <p class="text-muted small">Mulai impian finansialmu sekarang!</p>
+        <h5 class="fw-bold text-muted">{{ __('messages.empty_goals_title') }}</h5>
+        <p class="text-muted small">{{ __('messages.empty_goals_desc') }}</p>
     </div>
     @endforelse
 </div>
@@ -168,28 +169,28 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0">
             <div class="modal-header border-0">
-                <h5 class="modal-title fw-bold">Buat Target Baru</h5>
+                <h5 class="modal-title fw-bold">{{ __('messages.create_goal_title') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{ route('goals.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">Nama Target</label>
-                        <input type="text" name="name" class="form-control rounded-3 py-2" placeholder="Contoh: Beli Laptop Gaming" required>
+                        <label class="form-label small fw-bold text-muted">{{ __('messages.goal_name_label') }}</label>
+                        <input type="text" name="name" class="form-control rounded-3 py-2" placeholder="{{ __('messages.goal_placeholder') }}" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">Target Dana (Rp)</label>
+                        <label class="form-label small fw-bold text-muted">{{ __('messages.target_amount_label') }}</label>
                         <input type="number" name="target_amount" class="form-control rounded-3 py-2" placeholder="0" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">Target Tercapai Pada (Opsional)</label>
+                        <label class="form-label small fw-bold text-muted">{{ __('messages.target_date_label') }}</label>
                         <input type="date" name="deadline" class="form-control rounded-3 py-2">
                     </div>
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-light rounded-3 fw-bold text-muted" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success rounded-3 fw-bold px-4" style="background-color: #13ec5b; border: none; color: #000;">Simpan Target</button>
+                    <button type="button" class="btn btn-light rounded-3 fw-bold text-muted" data-bs-dismiss="modal">{{ __('messages.cancel') }}</button>
+                    <button type="submit" class="btn btn-success rounded-3 fw-bold px-4" style="background-color: #13ec5b; border: none; color: #000;">{{ __('messages.save_goal_btn') }}</button>
                 </div>
             </form>
         </div>

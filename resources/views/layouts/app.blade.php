@@ -66,19 +66,19 @@
 
         <nav class="nav flex-column">
             <a class="nav-link {{ Request::routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                <span class="material-symbols-outlined">home</span> Home
+                <span class="material-symbols-outlined">home</span> {{ __('messages.dashboard') }}
             </a>
             <a class="nav-link {{ Request::routeIs('wallets.index') ? 'active' : '' }}" href="{{ route('wallets.index') }}">
-                <span class="material-symbols-outlined">account_balance_wallet</span> Dompet
+                <span class="material-symbols-outlined">account_balance_wallet</span> {{ __('messages.wallets') }}
             </a>
             <a class="nav-link {{ Request::routeIs('transactions.index') ? 'active' : '' }}" href="{{ route('transactions.index') }}">
-                <span class="material-symbols-outlined">receipt_long</span> Transaksi
+                <span class="material-symbols-outlined">receipt_long</span> {{ __('messages.transactions') }}
             </a>
             <a class="nav-link {{ Request::routeIs('goals.index') ? 'active' : '' }}" href="{{ route('goals.index') }}">
-                <span class="material-symbols-outlined">track_changes</span> Target
+                <span class="material-symbols-outlined">track_changes</span> {{ __('messages.goals') }}
             </a>
             <a class="nav-link {{ Request::routeIs('reports.index') ? 'active' : '' }}" href="{{ route('reports.index') }}">
-                <span class="material-symbols-outlined">insights</span> Laporan & AI
+                <span class="material-symbols-outlined">insights</span> {{ __('messages.reports') }}
             </a>
         </nav>
 
@@ -86,7 +86,7 @@
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="nav-link text-danger w-100 bg-transparent border-0">
-                    <span class="material-symbols-outlined">logout</span> Logout
+                    <span class="material-symbols-outlined">logout</span> {{ __('messages.logout') }}
                 </button>
             </form>
         </div>
@@ -104,13 +104,28 @@
                                 <span class="material-symbols-outlined text-muted fs-5">search</span>
                             </button>
                             <input type="text" name="search" class="form-control border-start-0 rounded-end-4 shadow-none py-2"
-                                placeholder="Cari transaksi (cth: Makan, Gaji)..."
-                                value="{{ request('search') }}">
+                                   placeholder="{{ __('messages.search_placeholder') }}"
+                                   value="{{ request('search') }}">
                         </div>
                     </form>
                 </div>
 
                 <div class="d-flex align-items-center gap-3">
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                            <span class="material-symbols-outlined text-muted">language</span>
+                            <span class="text-uppercase small fw-bold">{{ LaravelLocalization::getCurrentLocale() }}</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-4 mt-2">
+                            @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                <li>
+                                    <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}" class="dropdown-item small">
+                                        {{ $properties['native'] }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
 
                     <div class="dropdown">
                         <button class="btn btn-light rounded-circle p-2 position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">

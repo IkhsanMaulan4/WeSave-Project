@@ -17,7 +17,7 @@
             background-color: #ffffff;
             margin: 0;
             padding: 0;
-            overflow-x: hidden; /* Mencegah scroll samping */
+            overflow-x: hidden; 
         }
     </style>
 </head>

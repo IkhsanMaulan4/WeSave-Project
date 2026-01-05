@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', __('messages.dashboard'))
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h2 class="fw-bold text-dark mb-1">Welcome back, {{ Auth::user()->name }}! 👋</h2>
-        <p class="text-muted">Ini ringkasan keuanganmu hari ini.</p>
+        <p class="text-muted">{{ __(('messages.summary')) }}</p>
     </div>
-    
+
 </div>
 
 <div class="row g-4 mb-5">
@@ -24,7 +24,7 @@
                     </span>
                 </div>
                 <div class="mt-3">
-                    <p class="text-muted small fw-bold mb-1">Total Saldo</p>
+                    <p class="text-muted small fw-bold mb-1">{{ __('messages.total_balance') }}</p>
                     <h3 class="fw-bolder mb-0">Rp {{ number_format($totalBalance, 0, ',', '.') }}</h3>
                 </div>
             </div>
@@ -38,10 +38,10 @@
                     <div class="bg-primary bg-opacity-10 p-2 rounded-3 text-primary">
                         <span class="material-symbols-outlined">arrow_downward</span>
                     </div>
-                    <span class="badge bg-light text-muted rounded-pill px-2 py-1">Bulan Ini</span>
+                    <span class="badge bg-light text-muted rounded-pill px-2 py-1">{{ __(('messages.this_month')) }}</span>
                 </div>
                 <div class="mt-3">
-                    <p class="text-muted small fw-bold mb-1">Pemasukan</p>
+                    <p class="text-muted small fw-bold mb-1">{{ __('messages.income')}}</p>
                     <h3 class="fw-bolder mb-0 text-success">+ Rp {{ number_format($incomeThisMonth, 0, ',', '.') }}</h3>
                 </div>
             </div>
@@ -55,10 +55,10 @@
                     <div class="bg-warning bg-opacity-10 p-2 rounded-3 text-warning">
                         <span class="material-symbols-outlined">arrow_upward</span>
                     </div>
-                    <span class="badge bg-light text-muted rounded-pill px-2 py-1">Bulan Ini</span>
+                    <span class="badge bg-light text-muted rounded-pill px-2 py-1">{{ __(('messages.this_month')) }}</span>
                 </div>
                 <div class="mt-3">
-                    <p class="text-muted small fw-bold mb-1">Pengeluaran</p>
+                    <p class="text-muted small fw-bold mb-1">{{ __('messages.expense') }}</p>
                     <h3 class="fw-bolder mb-0 text-danger">- Rp {{ number_format($expenseThisMonth, 0, ',', '.') }}</h3>
                 </div>
             </div>
@@ -70,8 +70,8 @@
     <div class="col-lg-8">
         <div class="card card-custom border-0 p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="fw-bold mb-0">Transaksi Terakhir</h5>
-                <a href="{{ route('transactions.index') }}" class="btn btn-sm btn-light rounded-pill px-3">Lihat Semua</a>
+                <h5 class="fw-bold mb-0">{{ __('messages.recent_transactions') }}</h5>
+                <a href="{{ route('transactions.index') }}" class="btn btn-sm btn-light rounded-pill px-3">{{ __('messages.view_all') }}</a>
             </div>
 
             <div class="table-responsive">
@@ -101,7 +101,7 @@
                         @empty
                         <tr>
                             <td colspan="3" class="text-center text-muted py-4">
-                                <small>Belum ada transaksi.</small>
+                                <small>{{ __('messages.no_transaction') }}</small>
                             </td>
                         </tr>
                         @endforelse
@@ -114,7 +114,7 @@
     <div class="col-lg-4">
         <div class="card card-custom border-0 p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="fw-bold mb-0">Target Menabung</h5>
+                <h5 class="fw-bold mb-0">{{ __(('messages.goals')) }}</h5>
                 <a href="{{ route('goals.index') }}" class="btn btn-sm btn-light rounded-circle"><span class="material-symbols-outlined">add</span></a>
             </div>
 
@@ -143,15 +143,15 @@
                 @empty
                 <div class="text-center py-4 text-muted">
                     <span class="material-symbols-outlined fs-1 opacity-25">track_changes</span>
-                    <p class="small mb-0">Belum ada target.</p>
+                    <p class="small mb-0">{{ __(('messages.no_goals')) }}</p>
                 </div>
                 @endforelse
 
                 <div class="alert alert-success d-flex gap-3 mt-2 border-0 bg-opacity-10 align-items-start mb-0" role="alert">
                     <span class="material-symbols-outlined text-success fs-5">psychology</span>
                     <div>
-                        <p class="fw-bold small mb-1 text-dark">Tips Hemat</p>
-                        <small class="text-muted lh-1" style="font-size: 11px;">Cek menu "Laporan & AI" untuk analisa lengkap keuanganmu.</small>
+                        <p class="fw-bold small mb-1 text-dark">{{ __(('messages.saving_tips')) }}</p>
+                        <small class="text-muted lh-1" style="font-size: 11px;">{{ __(('messages.check_ai')) }}</small>
                     </div>
                 </div>
             </div>
