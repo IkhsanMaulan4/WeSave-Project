@@ -20,7 +20,7 @@ class TransactionController extends Controller
         $categories = Category::where('user_id', $userId)->get();
 
         $query = Transaction::where('user_id', $userId)
-            ->with(['wallet', 'category']); 
+            ->with(['wallet', 'category']);
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
@@ -68,8 +68,8 @@ class TransactionController extends Controller
             $transaction = Transaction::create([
                 'user_id' => $user->id,
                 'wallet_id' => $request->wallet_id,
-                'category_id' => $request->category_id,
-                'destination_wallet_id' => $request->destination_wallet_id,
+                'category_id' => $request->category_id ?: null,
+                'destination_wallet_id' => $request->destination_wallet_id ?: null,
                 'amount' => $amount,
                 'type' => $request->type,
                 'transaction_date' => $request->transaction_date,
