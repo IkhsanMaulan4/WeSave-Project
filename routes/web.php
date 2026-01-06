@@ -11,6 +11,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ProfileController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use App\Http\Controllers\AdminController;
 
 Route::group([
     'prefix' => LaravelLocalization::setLocale(),
@@ -18,6 +19,9 @@ Route::group([
 ], function () {
     Route::get('/', function () {
         if (Auth::check()) {
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            }
             return redirect()->route('dashboard');
         }
         return redirect()->route('login');
@@ -39,6 +43,12 @@ Route::group([
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+        // Profile
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile/avatar', [ProfileController::class, 'destroyAvatar'])->name('profile.avatar.destroy');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
         Route::middleware('role:user')->group(function () {
 
@@ -68,18 +78,18 @@ Route::group([
                 return redirect()->back();
             })->name('notifications.readAll');
 
-            // Profile
-            Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-            Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-            Route::delete('/profile/avatar', [ProfileController::class, 'destroyAvatar'])->name('profile.avatar.destroy');
-            Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
         });
 
         Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
 
-            Route::get('/dashboard', function () {
-                return "<h1>Halaman Admin</h1><p>Hanya user dengan role 'admin' yang bisa melihat ini.</p>";
-            })->name('dashboard');
+            Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+            Route::get('/users', [AdminController::class, 'users'])->name('users.index');
+            Route::get('/users/create', [AdminController::class, 'createUser'])->name('users.create');
+            Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
+            Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])->name('users.edit');
+            Route::put('/users/{id}', [AdminController::class, 'updateUser'])->name('users.update');
+            Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])->name('users.destroy');
         });
     });
 });
