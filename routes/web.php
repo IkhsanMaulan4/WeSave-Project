@@ -44,6 +44,12 @@ Route::group([
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+        // Profile
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile/avatar', [ProfileController::class, 'destroyAvatar'])->name('profile.avatar.destroy');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
         Route::middleware('role:user')->group(function () {
 
             // Wallets
@@ -72,18 +78,14 @@ Route::group([
                 return redirect()->back();
             })->name('notifications.readAll');
 
-            // Profile
-            Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-            Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-            Route::delete('/profile/avatar', [ProfileController::class, 'destroyAvatar'])->name('profile.avatar.destroy');
-            Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
         });
 
         Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
 
             Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
             Route::get('/users', [AdminController::class, 'users'])->name('users.index');
-            Route::get('/users/create', [AdminController::class, 'createUser'])->name('users.create'); 
+            Route::get('/users/create', [AdminController::class, 'createUser'])->name('users.create');
             Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
             Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])->name('users.edit');
             Route::put('/users/{id}', [AdminController::class, 'updateUser'])->name('users.update');
