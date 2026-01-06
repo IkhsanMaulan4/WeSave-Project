@@ -65,21 +65,44 @@
         </a>
 
         <nav class="nav flex-column">
-            <a class="nav-link {{ Request::routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                <span class="material-symbols-outlined">home</span> {{ __('messages.dashboard') }}
-            </a>
-            <a class="nav-link {{ Request::routeIs('wallets.index') ? 'active' : '' }}" href="{{ route('wallets.index') }}">
-                <span class="material-symbols-outlined">account_balance_wallet</span> {{ __('messages.wallets') }}
-            </a>
-            <a class="nav-link {{ Request::routeIs('transactions.index') ? 'active' : '' }}" href="{{ route('transactions.index') }}">
-                <span class="material-symbols-outlined">receipt_long</span> {{ __('messages.transactions') }}
-            </a>
-            <a class="nav-link {{ Request::routeIs('goals.index') ? 'active' : '' }}" href="{{ route('goals.index') }}">
-                <span class="material-symbols-outlined">track_changes</span> {{ __('messages.goals') }}
-            </a>
-            <a class="nav-link {{ Request::routeIs('reports.index') ? 'active' : '' }}" href="{{ route('reports.index') }}">
-                <span class="material-symbols-outlined">insights</span> {{ __('messages.reports') }}
-            </a>
+            @if(Auth::user()->role == 'admin')
+                    <div class="text-muted text-uppercase small fw-bold ps-3 mt-2 mb-1">Admin Menu</div>
+
+                    <a class="nav-link d-flex align-items-center gap-2 rounded-3 {{ Request::routeIs('admin.dashboard') ? 'active bg-primary text-white' : 'text-secondary' }}"
+                    href="{{ route('admin.dashboard') }}">
+                        <span class="material-symbols-outlined">dashboard</span> Dashboard
+                    </a>
+                    <a class="nav-link d-flex align-items-center gap-2 rounded-3 {{ Request::routeIs('admin.users.index') ? 'active bg-primary text-white' : 'text-secondary' }}"
+                    href="{{ route('admin.users.index') }}">
+                        <span class="material-symbols-outlined">group</span> Kelola User
+                    </a>
+
+            @else
+                <div class="text-muted text-uppercase small fw-bold ps-3 mt-2 mb-1">Menu Utama</div>
+
+                <a class="nav-link d-flex align-items-center gap-2 rounded-3 {{ Request::routeIs('dashboard') ? 'active bg-primary text-white' : 'text-secondary' }}"
+                href="{{ route('dashboard') }}">
+                    <span class="material-symbols-outlined">home</span> {{ __('messages.dashboard') }}
+                </a>
+                <a class="nav-link d-flex align-items-center gap-2 rounded-3 {{ Request::routeIs('wallets.*') ? 'active bg-primary text-white' : 'text-secondary' }}"
+                href="{{ route('wallets.index') }}">
+                    <span class="material-symbols-outlined">account_balance_wallet</span> {{ __('messages.wallets') }}
+                </a>
+                <a class="nav-link d-flex align-items-center gap-2 rounded-3 {{ Request::routeIs('transactions.*') ? 'active bg-primary text-white' : 'text-secondary' }}"
+                href="{{ route('transactions.index') }}">
+                    <span class="material-symbols-outlined">receipt_long</span> {{ __('messages.transactions') }}
+                </a>
+
+                <a class="nav-link d-flex align-items-center gap-2 rounded-3 {{ Request::routeIs('goals.*') ? 'active bg-primary text-white' : 'text-secondary' }}"
+                href="{{ route('goals.index') }}">
+                    <span class="material-symbols-outlined">track_changes</span> {{ __('messages.goals') }}
+                </a>
+
+                <a class="nav-link d-flex align-items-center gap-2 rounded-3 {{ Request::routeIs('reports.*') ? 'active bg-primary text-white' : 'text-secondary' }}"
+                href="{{ route('reports.index') }}">
+                    <span class="material-symbols-outlined">insights</span> {{ __('messages.reports') }}
+                </a>
+            @endif
         </nav>
 
         <div class="mt-auto pt-5 border-top">

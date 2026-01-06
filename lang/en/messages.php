@@ -66,7 +66,7 @@ return [
     'date_bold'        => 'DATE',
     'amount_bold'      => 'AMOUNT',
     'action_bold'      => 'ACTION',
-    'empty_transactions_msg' => 'Belum ada transaksi. Yuk catat pengeluaranmu!',
+    'empty_transactions_msg' => 'There are no transactions yet. Let\'s record your expenses !',
     'select_category'    => 'Select Category',
     'to_wallet'          => 'To Wallet',
     'select_destination' => 'Select Destination',
